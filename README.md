@@ -6,6 +6,4 @@
 
 	PrivateDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","Http", "Json", "JsonUtilities" });
 
-3  - Set Local sharedFolderJson inside Content folder: 
-
-	"Content/sharedFolderJson/ARContent.json"
+3  - Set Local sharedFolderJson outside Main project Folder. For default local content is located at /Content/, then copy sharedFolderJson at --> "../../sharedFolderJson/ARContent.json"
