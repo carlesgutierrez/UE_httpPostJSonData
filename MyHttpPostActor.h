@@ -78,7 +78,7 @@ struct FResponse_LastOrder {
 };
 
 UCLASS()
-class MYJSON149_API AMyHttpPostActor : public AActor
+class EASYBACCHUSAR_API AMyHttpPostActor : public AActor
 {
 	GENERATED_BODY()
 

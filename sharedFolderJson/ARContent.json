@@ -1,0 +1,27 @@
+{
+    "status": 1,
+    "message": "Get Details!!",
+    "get_ar_contents": [
+        {
+            "wine_image": "uploads/wines/index1.jpg",
+            "wine_name": "Cabernet Franc",
+            "drinking_temp": "-1",
+            "flavor_one_img": "uploads/icons/Flavors/blackberry_1x.png",
+            "flavor_one_name": "apple",
+            "flavor_two_img": "uploads/icons/Flavors/blackberry_1x.png",
+            "flavor_two_name": "apple",
+            "taste": "uploads/icons/light_3x.png",
+            "taste_name": "Light or Fruity",
+            "occasion": "uploads/icons/party_3x.png",
+            "occasion_name": "Party",
+            "dish_one": "uploads/icons/Dish/fish_1x.png",
+            "dish1_name": "chicken",
+            "dish_two": "uploads/icons/Taste/dry_1x.png",
+            "dish2_name": "Rough",
+            "color_img": "uploads/icons/red_3x.png",
+            "color_name": "Red",
+            "subcolor": null,
+            "hint": "1"
+        }
+    ]
+}
