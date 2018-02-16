@@ -56,28 +56,27 @@ USTRUCT(BlueprintType)
 struct FResponse_LastOrder : public FTableRowBase {
 	GENERATED_BODY()
 
-		UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_img;
-	UPROPERTY() FString wine_name;
-	UPROPERTY() FString color_img; //This might be Id
-	UPROPERTY() FString color_name; //not necesary its at general id info
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_img;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_name;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString color_img; //This might be Id
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString color_name; //not necesary its at general id info
 
-	UPROPERTY() FString subcolor_id; //Receiving NULL
-	UPROPERTY() FString hint_id;
-	UPROPERTY() FString drinking_temp;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString subcolor_id; //Receiving NULL
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString hint_id;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString drinking_temp;
 
-	UPROPERTY() FString flavor_one_img;
-	UPROPERTY() FString flavor_one_name;
-	UPROPERTY() FString flavor_two_img;
-	UPROPERTY() FString flavor_two_name;
-	UPROPERTY() FString taste_img;
-	UPROPERTY() FString taste_name;
-	UPROPERTY() FString occasion_img;
-	UPROPERTY() FString occasion_name;
-	UPROPERTY() FString dish1_img;
-	UPROPERTY() FString dish1_name;
-	UPROPERTY() FString dish2_img;
-	UPROPERTY() FString dish2_name;
-
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_one_img;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_one_name;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_two_img;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_two_name;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString taste_img;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString taste_name;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString occasion_img;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString occasion_name;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish1_img;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish1_name;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish2_img;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish2_name;
 
 	FResponse_LastOrder() {}
 };
@@ -133,16 +132,19 @@ public:
 
 	//UFUNCTION(BlueprintType)
 	UFUNCTION(BlueprintCallable)
-		void MyLocalJsonFileCall();
+		bool MyLocalJsonFileCall();
 
 	UFUNCTION(BlueprintCallable)
-		void MyHttpCall();
+		void MyHttpCall(); //Return value at OnResponseReceived
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	bool bDebugMode = true;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	bool bOnlineMode = false;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	bool bJsonLocalOutSiteMainProject = true;
 
 private:
 	FHttpModule* Http;

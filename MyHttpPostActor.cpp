@@ -30,7 +30,13 @@ void AMyHttpPostActor::BeginPlay()
 	}
 	else {
 		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("--> LocalJsonCall"));
-		MyLocalJsonFileCall();
+		bool bLoaded = MyLocalJsonFileCall();
+		//Let's try one more but as local file inside Content
+		if (bLoaded == false) {
+			bJsonLocalOutSiteMainProject = false; 
+			bool bLoadedJsonInsideContent = MyLocalJsonFileCall();
+			if(bLoadedJsonInsideContent)if (bDebugMode)UE_LOG(LogTemp, Warning, TEXT("SYNCRONIZATION NOT WORKING: Check sharedFolderJson folder is well located outside the project"));
+		}
 	}
 
 	Super::BeginPlay();
@@ -40,6 +46,9 @@ void AMyHttpPostActor::BeginPlay()
 void AMyHttpPostActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//TODO User interaction Info
+
 	//if (IsInputKeyDown(EKeys::A))
 
 	////#if !UE_BUILD_SHIPPING
@@ -61,9 +70,9 @@ FString AMyHttpPostActor::getMyJsonSharedFolder() {
 	if (true) {
 		//Will not easy work on Android or IOS -- >https://answers.unrealengine.com/questions/120796/adding-custom-files-to-the-android-content.html?sort=oldest
 		filePath = FPaths::ProjectContentDir(); //Decrepated  FPaths::GameContentDir();
-		//filePath += "sharedFolderJson/ARContent.json";
-		filePath += "../../sharedFolderJson/ARContent.json";
-
+		if(bJsonLocalOutSiteMainProject)filePath += "../../sharedFolderJson/ARContent.json";
+		else filePath += "sharedFolderJson/ARContent.json";
+		
 		filePathAbsolute = FPaths::ConvertRelativePathToFull(filePath);
 		filePath = filePathAbsolute;
 		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("looking at filePath %s"), *filePath);
@@ -76,8 +85,9 @@ FString AMyHttpPostActor::getMyJsonSharedFolder() {
 }
 
 //-------------------------------------------
-void AMyHttpPostActor::MyLocalJsonFileCall() {
+bool AMyHttpPostActor::MyLocalJsonFileCall() {
 
+	bool bJsonFound = false;
 	FString fileContent = "";
 	FString filePath = getMyJsonSharedFolder();
 
@@ -93,13 +103,17 @@ void AMyHttpPostActor::MyLocalJsonFileCall() {
 		//Create a reader pointer to read the json data
 		TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(fileContent);
 		saveMyArParams(Reader);
-
+		
+		//FOUND!
+		bJsonFound = true;
 	}
 	else
 	{
-		//if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("File not found");
+		//NOT FOUND
 		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("File not found. Folder used was [%s]"), *filePath);
 	}
+
+	return bJsonFound;
 
 }
 
