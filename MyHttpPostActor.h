@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Runtime/Online/HTTP/Public/Http.h"
 
+//DebugText
+#include "Runtime/Engine/Public/DrawDebugHelpers.h"
+
 //Dir 
 #include "Runtime/Core/Public/Misc/Paths.h"
 #include "Runtime/Core/Public/Misc/FileHelper.h"
@@ -15,9 +18,11 @@
 #include "Runtime/Json/Public/Serialization/JsonReader.h"
 #include "Runtime/Json/Public/Serialization/JsonSerializer.h"
 #include "Engine/Engine.h"
-
 //#include "JsonUtilities.h"
 #include "Runtime/JsonUtilities/Public/JsonObjectConverter.h"
+
+//Others
+#include "Runtime/Engine/Classes/Engine/DataTable.h"
 
 //last include
 #include "MyHttpPostActor.generated.h"
@@ -48,7 +53,7 @@ struct FResponse_Order {
 //USTRUCT(BlueprintReadWrite, VisibleAnywhere)
 //USTRUCT()
 USTRUCT(BlueprintType)
-struct FResponse_LastOrder {
+struct FResponse_LastOrder : public FTableRowBase {
 	GENERATED_BODY()
 
 		UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_img;
@@ -105,12 +110,17 @@ public:
 	/*Assign this function to call when the GET request processes sucessfully*/
 	void OnResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 	void saveMyArParams(TSharedRef<TJsonReader<>> Reader);
+	void saveStructInDataTable(int numRow);
 	FString PercentEncode(const FString & Source);
 
 	//Last Saved Info.
 	//USTRUCT(BlueprintType)
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 		FResponse_LastOrder myLastJsonRequestResult;
+
+	//
+	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	//UDataTable* GameObjectLookupTable;
 
 protected:
 	// Called when the game starts or when spawned
@@ -125,16 +135,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void MyLocalJsonFileCall();
 
-	UFUNCTION()
-		//UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 		void MyHttpCall();
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	bool bDebugMode = true;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	bool bOnlineMode = false;
+
 private:
 	FHttpModule* Http;
 	FString ApiBaseUrl = "http://easybacchus.ccube9projects.com/app/User/get_ar_contents";
-	FString myLocalJsonPath = "C:/Users/carles/Documents/develop/Unreal/mookan/MyJson149/Content/sharedFolderJson/ARContent.json";
+	//Just for emergencies 
+	FString myLocalJsonPath = "C:/Users/carles/Documents/develop/Unreal/mookan/sharedFolderJson/ARContent.json";
 };
 

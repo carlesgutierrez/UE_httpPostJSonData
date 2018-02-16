@@ -9,7 +9,6 @@ AMyHttpPostActor::AMyHttpPostActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
 }
 
 // Sets default values
@@ -23,16 +22,18 @@ AMyHttpPostActor::AMyHttpPostActor(const class FObjectInitializer& ObjectInitial
 // Called when the game starts or when spawned
 void AMyHttpPostActor::BeginPlay()
 {
-	if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("BeginPlay Http Post Actor"));
+	if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("BeginPlay HttpPostActor"));
 
-	//if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("--> HttpJsonCall"));
-	//MyHttpCall();
-
-	//if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("--> LocalJsonCall"));
-	MyLocalJsonFileCall();
+	if (bOnlineMode) {
+		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("--> HttpJsonCall"));
+		MyHttpCall();
+	}
+	else {
+		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("--> LocalJsonCall"));
+		MyLocalJsonFileCall();
+	}
 
 	Super::BeginPlay();
-
 }
 
 // Called every frame
@@ -40,6 +41,15 @@ void AMyHttpPostActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//if (IsInputKeyDown(EKeys::A))
+
+	////#if !UE_BUILD_SHIPPING
+	//FVector drawPos(0.0f);
+	//FColor drawColor = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f).ToFColor(true);
+	//float drawDuration = 0.0f;
+	//bool drawShadow = true;
+	//DrawDebugString(GEngine->GetWorldFromContextObjectChecked(this), drawPos, *FString::Printf(TEXT("%s[%d]"), TEXT("test"), 12345), NULL, drawColor, drawDuration, drawShadow);
+	////#endif //!UE_BUILD_SHIPPING
+	//UE_LOG(LogTemp, Warning, TEXT("Hell"));
 
 }
 
@@ -51,7 +61,8 @@ FString AMyHttpPostActor::getMyJsonSharedFolder() {
 	if (true) {
 		//Will not easy work on Android or IOS -- >https://answers.unrealengine.com/questions/120796/adding-custom-files-to-the-android-content.html?sort=oldest
 		filePath = FPaths::ProjectContentDir(); //Decrepated  FPaths::GameContentDir();
-		filePath += "sharedFolderJson/ARContent.json";
+		//filePath += "sharedFolderJson/ARContent.json";
+		filePath += "../../sharedFolderJson/ARContent.json";
 
 		filePathAbsolute = FPaths::ConvertRelativePathToFull(filePath);
 		filePath = filePathAbsolute;
@@ -82,11 +93,12 @@ void AMyHttpPostActor::MyLocalJsonFileCall() {
 		//Create a reader pointer to read the json data
 		TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(fileContent);
 		saveMyArParams(Reader);
+
 	}
 	else
 	{
 		//if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("File not found");
-		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("File not found"));
+		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("File not found. Folder used was [%s]"), *filePath);
 	}
 
 }
@@ -228,6 +240,8 @@ FString AMyHttpPostActor::HACK_SetContentAsString(TSharedRef<IHttpRequest>& Requ
 /*Http calls*/
 void AMyHttpPostActor::MyHttpCall()
 {
+	UE_LOG(LogTemp, Warning, TEXT("MyHttpCall Active"));
+
 	//Step 1 Create te Struct
 	FRequest_Order myOrderParamJson;
 	myOrderParamJson.language_text = TEXT("language");
@@ -261,7 +275,7 @@ void AMyHttpPostActor::OnResponseReceived(FHttpRequestPtr Request, FHttpResponse
 }
 
 //----------------------------------------------------------
-void AMyHttpPostActor::saveMyArParams(TSharedRef<TJsonReader<>> Reader) {
+void  AMyHttpPostActor::saveMyArParams(TSharedRef<TJsonReader<>> Reader) {
 	//Create a pointer to hold the json serialized data
 	TSharedPtr<FJsonObject> JsonObjectParsed;
 
@@ -275,7 +289,10 @@ void AMyHttpPostActor::saveMyArParams(TSharedRef<TJsonReader<>> Reader) {
 
 		if (JsonObjectParsed->HasField("get_ar_contents")) {
 			TArray <TSharedPtr<FJsonValue>> get_ar_contentsJson = JsonObjectParsed->GetArrayField("get_ar_contents");
+			int numStrutsAvailable = 0;
+
 			for (int i = 0; i != get_ar_contentsJson.Num(); i++) {
+								
 				if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("get_ar_contents[%i]-->"), i);
 
 				//Get SUBJson Object
@@ -366,6 +383,9 @@ void AMyHttpPostActor::saveMyArParams(TSharedRef<TJsonReader<>> Reader) {
 				if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("recievedString dish2_name %s"), *recievedString_dish2_name);
 				myLastJsonRequestResult.dish2_name = recievedString_dish2_name;//Save
 
+				//Save the amount of data available
+				saveStructInDataTable(numStrutsAvailable);
+				numStrutsAvailable++;
 
 				//TODO how this works?
 				//Output it to the engine
@@ -373,6 +393,17 @@ void AMyHttpPostActor::saveMyArParams(TSharedRef<TJsonReader<>> Reader) {
 			}
 		}
 	}
+}
+
+//------------------------------------------------------
+void AMyHttpPostActor::saveStructInDataTable(int numRow) {
+	//Save Obtained Struct into DataTable
+	//static const FString ContextString(TEXT("GENERAL"));
+
+	//May be not necesary
+	//GameObjectLookupTable.AddRow
+
+	
 
 }
 
