@@ -23,6 +23,7 @@
 
 //Others
 #include "Runtime/Engine/Classes/Engine/DataTable.h"
+#include "StructDataInfo.h"
 
 //last include
 #include "MyHttpPostActor.generated.h"
@@ -50,38 +51,37 @@ struct FResponse_Order {
 
 ////Struct available to consult Last data readed
 //If you want this to appear in BP, make sure to use this instead
-//USTRUCT(BlueprintReadWrite, VisibleAnywhere)
-//USTRUCT()
-USTRUCT(BlueprintType)
-struct FResponse_LastOrder : public FTableRowBase {
-	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_img;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_name;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString color_img; //This might be Id
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString color_name; //not necesary its at general id info
+//USTRUCT(BlueprintType)
+//struct FResponse_LastOrder : public FTableRowBase {
+//	GENERATED_BODY()
+//
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_img;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString wine_name;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString color_img; //This might be Id
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString color_name; //not necesary its at general id info
+//
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString subcolor_id; //Receiving NULL
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString hint_id;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString drinking_temp;
+//
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_one_img;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_one_name;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_two_img;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_two_name;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString taste_img;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString taste_name;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString occasion_img;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString occasion_name;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish1_img;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish1_name;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish2_img;
+//	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish2_name;
+//
+//	FResponse_LastOrder() {}
+//};
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString subcolor_id; //Receiving NULL
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString hint_id;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString drinking_temp;
-
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_one_img;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_one_name;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_two_img;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString flavor_two_name;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString taste_img;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString taste_name;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString occasion_img;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString occasion_name;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish1_img;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish1_name;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish2_img;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere) FString dish2_name;
-
-	FResponse_LastOrder() {}
-};
-
-UCLASS()
+UCLASS(Blueprintable)
 class EASYBACCHUSAR_API AMyHttpPostActor : public AActor
 {
 	GENERATED_BODY()
@@ -114,8 +114,8 @@ public:
 
 	//Last Saved Info.
 	//USTRUCT(BlueprintType)
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-		FResponse_LastOrder myLastJsonRequestResult;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		FStructDataInfo myLastJsonRequestResult;
 
 	//
 	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
