@@ -8,7 +8,6 @@ AMyHttpPostActor::AMyHttpPostActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Sets default values
@@ -23,6 +22,17 @@ AMyHttpPostActor::AMyHttpPostActor(const class FObjectInitializer& ObjectInitial
 void AMyHttpPostActor::BeginPlay()
 {
 	if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("BeginPlay HttpPostActor"));
+
+	FString fileName;
+	if (FParse::Value(FCommandLine::Get(), TEXT("QRARG"), fileName))
+	{
+		//UE_LOG or Printstirng "My flag QRCODE was present in the commandline!" ;
+		if (bDebugMode)UE_LOG(LogTemp, Warning, TEXT("My flag QRCODE: was present in the commandline!"));
+		fileName = fileName.Replace(TEXT("="), TEXT("")).Replace(TEXT("\""), TEXT(""));
+		QRCODE_ARG = fileName;
+		bQrcodeAvailable = true;
+	}
+	else QRCODE_ARG = "QRCODE EMPTY";
 
 	if (bOnlineMode) {
 		if(bDebugMode)UE_LOG(LogTemp, Warning, TEXT("--> HttpJsonCall"));
@@ -58,7 +68,7 @@ void AMyHttpPostActor::Tick(float DeltaTime)
 	//bool drawShadow = true;
 	//DrawDebugString(GEngine->GetWorldFromContextObjectChecked(this), drawPos, *FString::Printf(TEXT("%s[%d]"), TEXT("test"), 12345), NULL, drawColor, drawDuration, drawShadow);
 	////#endif //!UE_BUILD_SHIPPING
-	//UE_LOG(LogTemp, Warning, TEXT("Hell"));
+	UE_LOG(LogTemp, Warning, TEXT("Hell"));
 
 }
 

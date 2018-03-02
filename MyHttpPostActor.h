@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Runtime/Online/HTTP/Public/Http.h"
 
+//Arguments 
+#include "Runtime/Core/Public/Misc/CommandLine.h"
+
 //DebugText
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
 
@@ -138,6 +141,12 @@ public:
 		void MyHttpCall(); //Return value at OnResponseReceived
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+		FString QRCODE_ARG;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	bool bQrcodeAvailable = false;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	bool bDebugMode = true;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
@@ -147,6 +156,7 @@ public:
 	bool bJsonLocalOutSiteMainProject = true;
 
 private:
+
 	FHttpModule* Http;
 	FString ApiBaseUrl = "http://easybacchus.ccube9projects.com/app/User/get_ar_contents";
 	//Just for emergencies 
